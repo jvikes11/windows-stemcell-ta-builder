@@ -28,6 +28,7 @@ govc vm.create \
   -iso-datastore $GOVC_DATASTORE \
   -pool $GOVC_RESOURCE_POOL \
   -host $GOVC_HOST \
-  -iso $govc_iso_path
+  -iso $govc_iso_path \
+  $GOVC_VM_NAME
 
 exit 1
