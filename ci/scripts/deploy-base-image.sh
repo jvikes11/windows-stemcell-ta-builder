@@ -19,7 +19,7 @@ govc vm.create \
   -ds $GOVC_DATASTORE \
   -folder $GOVC_FOLDER \
   -g $GOVC_GUEST_OS \
-  -n $GOVC_NETWORK \
+  -net $GOVC_NETWORK \
   -iso-datastore $GOVC_DATASTORE \
   -pool $GOVC_RESOURCE_POOL \
   -host $GOVC_HOST \
