@@ -15,6 +15,7 @@
 # Linux
 *~
 *.swp
+*.swo
 
 # Windows
 Thumbs.db
