@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+exec >&2
+set -e
+
+source pipeline/ci/scripts/common.sh
+
 echo "Deploy iso for $OS_NAME"
 
 

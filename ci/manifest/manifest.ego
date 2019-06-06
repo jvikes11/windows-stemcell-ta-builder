@@ -6,6 +6,11 @@ meta:
   pipeline:
     uri: https://github.com/jvikes11/windows-stemcell-ta-builder.git
 
+groups:
+- name: all
+  jobs:
+  - create-base-image
+
 jobs:
 <% if config.HasFeature("slack_updates") { %>
 - name: stemcells-windows-server-updates
@@ -42,6 +47,8 @@ jobs:
       GOVC_DATASTORE:     (( grab meta.govc_datastore ))
       GOVC_CLUSTER:       (( grab meta.govc_cluster ))
       GOVC_RESOURCE_POOL: (( grab meta.govc_resource_pool ))
+      GOVC_FOLDER:        (( grab meta.govc_folder ))
+      GOVC_HOST:          (( grab meta.govc_host ))
       GOVC_GUEST_OS:      (( grab meta.govc_guest_os ))
       GOVC_NUM_CPU:       (( grab meta.govc_num_cpu ))
       GOVC_MEMORY_MB:     (( grab meta.govc_memory_mb ))
@@ -49,6 +56,9 @@ jobs:
       GOVC_NETWORK:       (( grab meta.govc_network ))
       GOVC_VM_NAME:       (( grab meta.govc_vm_name ))
 
+      OS_NAME:            (( grab meta.os_name ))
+
+      DEBUG:              (( grab meta.debug || false ))
 resources:
 - name: stemcells-windows-server
   type: pivnet
@@ -74,7 +84,7 @@ resources:
   type: file-url
   source:
     url: (( grab meta.iso_url ))
-    filename: windows.iso
+    filename: os.iso
 
 resource_types:
 - name: pivnet
@@ -82,7 +92,6 @@ resource_types:
   source:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
-
 - name: file-url
   type: docker-image
   source:
