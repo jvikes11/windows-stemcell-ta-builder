@@ -2,4 +2,4 @@
 
 echo "Deploy an ova"
 
-
+exit 1
