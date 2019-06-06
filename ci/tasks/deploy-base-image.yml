@@ -17,6 +17,7 @@ params:
   GOVC_DATASTORE:
   GOVC_CLUSTER:
   GOVC_RESOURCE_POOL:
+  GOVC_FOLDER:
   GOVC_HOST:
   GOVC_GUEST_OS:
   GOVC_NUM_CPU:
@@ -24,6 +25,7 @@ params:
   GOVC_DISK_GB:
   GOVC_NETWORK:
   GOVC_VM_NAME:
+  OS_NAME:
 
 inputs:
   - name: pipeline

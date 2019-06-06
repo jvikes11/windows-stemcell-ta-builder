@@ -17,6 +17,7 @@ govc create.vm \
   -disk $GOVC_DISK_GB \
   -datastore-cluster $GOVC_CLUSTER \
   -ds $GOVC_DATASTORE \
+  -folder $GOVC_FOLDER \
   -g $GOVC_GUEST_OS \
   -n $GOVC_NETWORK \
   -iso-datastore $GOVC_DATASTORE \
