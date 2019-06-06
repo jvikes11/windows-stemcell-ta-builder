@@ -16,7 +16,7 @@ govc datastore.upload \
   iso/os.iso \
   $govc_iso_path
 
-govc vm.create \
+govc -dc $GOVC_DATACENTER vm.create \
   -m $GOVC_MEMORY_MB \
   -c $GOVC_NUM_CPU \
   -disk $GOVC_DISK_GB \
