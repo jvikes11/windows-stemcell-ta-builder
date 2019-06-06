@@ -1,0 +1,90 @@
+<%! func ManifestTmpl(w io.Writer, config Config) error %>
+<%% import . "github.com/compozed/travel-agent/models" %%>
+---
+
+meta:
+  pipeline:
+    uri: https://github.com/jvikes11/windows-stemcell-ta-builder.git
+
+jobs:
+<% if config.HasFeature("slack_updates") { %>
+- name: stemcells-windows-server-updates
+  plan:
+  - get: stemcells-windows-server
+    params:
+      globs: []
+    trigger: true
+    on_success:
+      put: notify
+      params:
+        channel:  (( grab meta.slack_updates.channel ))
+        username: (( grab meta.slack_updates.username ))
+        icon_url: (( grab meta.slack_updates.icon_url ))
+        text: "New <%= config.Name %> tile available"
+<% } %>
+
+- name: create-base-image
+  serial: true
+  public: true
+  plan:
+  - aggregate:
+    - get: iso
+    - get: pipeline
+    - get: stemcells-windows-server
+  - task: deploy-base-image
+    file: pipeline/ci/tasks/deploy-base-image.yml
+    params:
+      GOVC_URL:           (( grab meta.govc_url ))
+      GOVC_INSECURE:      (( grab meta.govc_insecure ))
+      GOVC_USERNAME:      (( grab meta.govc_username ))
+      GOVC_PASSWORD:      (( grab meta.govc_password ))
+      GOVC_DATACENTER:    (( grab meta.govc_datacenter ))
+      GOVC_DATASTORE:     (( grab meta.govc_datastore ))
+      GOVC_CLUSTER:       (( grab meta.govc_cluster ))
+      GOVC_RESOURCE_POOL: (( grab meta.govc_resource_pool ))
+      GOVC_GUEST_OS:      (( grab meta.govc_guest_os ))
+      GOVC_NUM_CPU:       (( grab meta.govc_num_cpu ))
+      GOVC_MEMORY_MB:     (( grab meta.govc_memory_mb ))
+      GOVC_DISK_GB:       (( grab meta.govc_disk_gb ))
+      GOVC_NETWORK:       (( grab meta.govc_network ))
+      GOVC_VM_NAME:       (( grab meta.govc_vm_name ))
+
+resources:
+- name: stemcells-windows-server
+  type: pivnet
+  source:
+    api_token:    (( grab meta.pivnet_token ))
+    product_slug: (( grab meta.product_slug ))
+    sort_by: semver
+
+- name: pipeline
+  type: git
+  source:
+    branch:      (( grab meta.pipeline.branch || "master" ))
+    uri:         (( grab meta.pipeline.uri ))
+
+<% if config.HasFeature("slack_updates") { %>
+- name: notify
+  type: slack-notification
+  source:
+    url: (( grab meta.slack_updates.uri || "" ))
+<% } %>
+
+- name: iso
+  type: file-url
+  source:
+    url: (( grab meta.iso_url ))
+    filename: windows.iso
+
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+- name: file-url
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
