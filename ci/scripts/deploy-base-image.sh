@@ -16,11 +16,12 @@ govc datastore.upload \
   iso/os.iso \
   $govc_iso_path
 
-govc -dc $GOVC_DATACENTER vm.create \
+govc vm.create \
   -m $GOVC_MEMORY_MB \
   -c $GOVC_NUM_CPU \
   -disk $GOVC_DISK_GB \
   -datastore-cluster $GOVC_CLUSTER \
+  -dc $GOVC_DATACENTER \
   -ds $GOVC_DATASTORE \
   -folder $GOVC_FOLDER \
   -g $GOVC_GUEST_OS \
