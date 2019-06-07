@@ -38,8 +38,6 @@ function create_vm() {
     -iso-datastore $GOVC_DATASTORE \
     -pool $GOVC_RESOURCE_POOL \
     -host $GOVC_HOST \
-    -iso $govc_iso_path \
-    -on false \
     $GOVC_VM_NAME
 }
 
