@@ -9,6 +9,7 @@ echo "Deploy iso for $OS_NAME"
 
 
 govc_iso_path="ISO/$OS_NAME.iso"
+govc_iso_path="ISO/Unattended-$OS_NAME.img"
 
 function upload_files() {
 
@@ -17,6 +18,10 @@ function upload_files() {
     iso/os.iso \
     $govc_iso_path
 
+  govc datastore.upload \
+    -ds $GOVC_DATASTORE \
+    img/unattended-floppy.img \
+    $govc_iso_path
 }
 
 function create_vm() {
@@ -38,5 +43,7 @@ function create_vm() {
     $GOVC_VM_NAME
 }
 
+upload_files
+create_vm
 
 exit 1
