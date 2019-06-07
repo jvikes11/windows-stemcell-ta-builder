@@ -33,7 +33,9 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: iso
+    - get: windows-core-iso
+    - get: base-floppy-img
+    - get: config
     - get: pipeline
     - get: stemcells-windows-server
   - task: deploy-base-image
@@ -45,7 +47,6 @@ jobs:
       GOVC_PASSWORD:      (( grab meta.govc_password ))
       GOVC_DATACENTER:    (( grab meta.govc_datacenter ))
       GOVC_DATASTORE:     (( grab meta.govc_datastore ))
-      GOVC_CLUSTER:       (( grab meta.govc_cluster ))
       GOVC_RESOURCE_POOL: (( grab meta.govc_resource_pool ))
       GOVC_FOLDER:        (( grab meta.govc_folder ))
       GOVC_HOST:          (( grab meta.govc_host ))
@@ -73,6 +74,15 @@ resources:
     branch:      (( grab meta.pipeline.branch || "master" ))
     uri:         (( grab meta.pipeline.uri ))
 
+- name: config
+  type: git
+  source:
+    paths:
+    - default/<%= config.Name %>
+    branch:      (( grab meta.configs.branch || "master" ))
+    private_key: (( grab meta.configs.private_key ))
+    uri:         (( grab meta.configs.uri ))
+
 <% if config.HasFeature("slack_updates") { %>
 - name: notify
   type: slack-notification
@@ -80,11 +90,17 @@ resources:
     url: (( grab meta.slack_updates.uri || "" ))
 <% } %>
 
-- name: iso
+- name: windows-core-iso
   type: file-url
   source:
     url: (( grab meta.iso_url ))
-    filename: os.iso
+    filename: windows-core-iso.iso
+
+- name: base-floppy-img
+  type: file-url
+  source:
+    url: (( grab meta.img_url ))
+    filename: base-floppy.img
 
 resource_types:
 - name: pivnet

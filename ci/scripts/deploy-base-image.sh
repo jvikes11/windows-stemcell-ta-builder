@@ -12,14 +12,14 @@ govc_iso_path="ISO/$OS_NAME.iso"
 govc_img_path="ISO/Unattended-$OS_NAME.img"
 
 function upload_files() {
-#  govc datastore.upload \
-#    -ds $GOVC_DATASTORE \
-#    iso/windows.iso
-#    $govc_iso_path
+
+  #govc datastore.upload \
+  #  -ds $GOVC_DATASTORE \
+  #  iso/windows.iso $govc_iso_path
 
   govc datastore.upload \
     -ds $GOVC_DATASTORE \
-    img/unattended-floppy.img \
+    base-floppy-img/base-floppy.img \
     $govc_img_path
 }
 

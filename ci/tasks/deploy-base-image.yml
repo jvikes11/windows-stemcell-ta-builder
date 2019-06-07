@@ -28,8 +28,9 @@ params:
 
 inputs:
   - name: pipeline
-  - name: iso
-  - name: img
+  - name: config
+  - name: windows-core-iso
+  - name: base-floppy-img
 
 run:
   path: pipeline/ci/scripts/deploy-base-image.sh
