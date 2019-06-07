@@ -20,8 +20,8 @@ function upload_files() {
 
   govc datastore.upload \
     -ds $GOVC_DATASTORE \
-    img/unattended-floppy.img \
-    $govc_iso_path
+    ISO/unattended-floppy.img \
+    $govc_img_path
 }
 
 function create_vm() {
