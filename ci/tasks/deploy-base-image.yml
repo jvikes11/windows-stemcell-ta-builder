@@ -29,6 +29,7 @@ params:
 inputs:
   - name: pipeline
   - name: iso
+  - name: img
 
 run:
   path: pipeline/ci/scripts/deploy-base-image.sh
