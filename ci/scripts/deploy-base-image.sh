@@ -45,6 +45,10 @@ function create_vm() {
 }
 
 function initial_boot_vm() {
+  local govc_hd_disk_name=$(govc device.info -vm $GOVC_VM_NAME -json | jq -r '.Devices | .[].Name' | grep disk)
+
+  govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order -
+  govc device.remove -vm $GOVC_VM_NAME $govc_hd_disk_name
 
   govc device.cdrom.add -vm $GOVC_VM_NAME
   govc device.cdrom.insert -vm $GOVC_VM_NAME $govc_iso_path
