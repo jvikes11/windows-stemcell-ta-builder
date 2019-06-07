@@ -12,10 +12,13 @@ govc_iso_path="ISO/$OS_NAME.iso"
 govc_img_path="ISO/Unattended-$OS_NAME.img"
 
 function upload_files() {
-
-  #govc datastore.upload \
-  #  -ds $GOVC_DATASTORE \
-  #  iso/windows.iso $govc_iso_path
+  if echo `govc datastore.ls $govc_iso_path` | grep -q "not found" ; then
+    govc datastore.upload \
+      -ds $GOVC_DATASTORE \
+      iso/windows.iso $govc_iso_path
+  else
+    echo "Skipping uploading core windows, found: $govc_iso_path"
+  fi
 
   govc datastore.upload \
     -ds $GOVC_DATASTORE \
