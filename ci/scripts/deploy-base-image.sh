@@ -13,10 +13,10 @@ govc_iso_path="ISO/Unattended-$OS_NAME.img"
 
 function upload_files() {
 
-  govc datastore.upload \
-    -ds $GOVC_DATASTORE \
-    iso/os.iso \
-    $govc_iso_path
+#  govc datastore.upload \
+#    -ds $GOVC_DATASTORE \
+#    iso/os.iso \
+#    $govc_iso_path
 
   govc datastore.upload \
     -ds $GOVC_DATASTORE \
