@@ -12,10 +12,9 @@ govc_iso_path="ISO/$OS_NAME.iso"
 govc_img_path="ISO/Unattended-$OS_NAME.img"
 
 function upload_files() {
-
 #  govc datastore.upload \
 #    -ds $GOVC_DATASTORE \
-#    iso/os.iso \
+#    iso/windows.iso
 #    $govc_iso_path
 
   govc datastore.upload \
@@ -66,10 +65,10 @@ function initial_boot_vm() {
 
 }
 
-#upload_files
-#create_vm
-#initial_boot_vm
+upload_files
+create_vm
+initial_boot_vm
 
-govc vm.guest.tools -mount $GOVC_VM_NAME
+#govc vm.guest.tools -mount $GOVC_VM_NAME
 
 exit 1
