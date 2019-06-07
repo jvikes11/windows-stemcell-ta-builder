@@ -71,7 +71,7 @@ function initial_boot_vm() {
 #initial_boot_vm
 
 govc vm.power -off $GOVC_VM_NAME
-govc vm.guest.tools -mount $GOVC_VM_NAME
 govc vm.power -on $GOVC_VM_NAME
+govc vm.guest.tools -mount $GOVC_VM_NAME
 
 exit 1
