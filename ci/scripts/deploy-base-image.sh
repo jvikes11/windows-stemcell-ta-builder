@@ -49,7 +49,7 @@ function initial_boot_vm() {
 
   govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order -
   govc device.remove -vm $GOVC_VM_NAME $govc_hd_disk_name
-  govc vm.disk.create -vm $name -name govc_hd_disk_name/disk1 -size $GOVC_DISK_GB -eager -thick
+  govc vm.disk.create -vm $name -name $govc_hd_disk_name/disk1 -size $GOVC_DISK_GB -eager -thick
 
   govc device.cdrom.add -vm $GOVC_VM_NAME
   govc device.cdrom.insert -vm $GOVC_VM_NAME $govc_iso_path
