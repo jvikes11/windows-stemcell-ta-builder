@@ -9,7 +9,7 @@ echo "Deploy iso for $OS_NAME"
 
 
 govc_iso_path="ISO/$OS_NAME.iso"
-govc_iso_path="ISO/Unattended-$OS_NAME.img"
+govc_img_path="ISO/Unattended-$OS_NAME.img"
 
 function upload_files() {
 
@@ -43,7 +43,22 @@ function create_vm() {
     $GOVC_VM_NAME
 }
 
+function initial_boot_vm() {
+
+  govc device.cdrom.add -vm $GOVC_VM_NAME
+  govc device.cdrom.insert -vm $GOVC_VM_NAME $govc_iso_path
+
+  govc device.floppy.add -vm $GOVC_VM_NAME
+  govc device.floppy.insert -vm $GOVC_VM_NAME $govc_img_path
+
+  govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order cdrom,disk,ethernet,floppy
+
+  govc vm.power -on $GOVC_VM_NAME
+
+}
+
 upload_files
 create_vm
+initial_boot_vm
 
 exit 1
