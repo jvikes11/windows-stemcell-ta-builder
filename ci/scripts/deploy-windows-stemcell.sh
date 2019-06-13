@@ -7,14 +7,22 @@ source pipeline/ci/scripts/common.sh
 
 echo "Deploy stemcell for $OS_NAME"
 
-function create_stemcell() {
+stembuild_file_name=$(basename $(cat stembuild/metadata.json | jq -r '.ProductFiles | .[].AWSObjectKey' | grep linux))
+
+function construct_stemcell() {
 
   echo "creating stemcell"
 
-  stembuild_file_name=$(basename $(cat stembuild/metadata.json | jq -r '.ProductFiles | .[].AWSObjectKey' | grep linux))
-  echo $stembuild_file_name
-
   ./stembuild/$stembuild_file_name construct -vm-ip $VM_IP -vm-username $VM_ADMIN_USERNAME -vm-password $VM_PASSWORD -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER
+
+}
+
+function_package_stemcell() {
+
+  echo "packaging stemcell"
+
+  ./stembuild/$stembuild_file_name package -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER
+
 }
 
 function upload_files() {
@@ -74,6 +82,7 @@ function initial_boot_vm() {
 
 }
 
-create_stemcell
+construct_stemcell
+package_stemcell
 
 exit 1
