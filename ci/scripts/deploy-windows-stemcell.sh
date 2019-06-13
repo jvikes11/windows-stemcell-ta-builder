@@ -24,7 +24,7 @@ function_package_stemcell() {
 
   echo "packaging stemcell"
 
-  ./stembuild/$stembuild_file_name package -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER
+  ./stembuild/$stembuild_file_name package -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER/$GOVC_VM_NAME
 
 }
 
