@@ -1,0 +1,35 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: bonzofenix/ci-tools
+    tag: edge
+
+params:
+  GOVC_URL:
+  GOVC_INSECURE:
+  GOVC_USERNAME:
+  GOVC_PASSWORD:
+  GOVC_DATACENTER:
+  GOVC_DATASTORE:
+  GOVC_RESOURCE_POOL:
+  GOVC_FOLDER:
+  GOVC_HOST:
+  GOVC_GUEST_OS:
+  GOVC_NUM_CPU:
+  GOVC_MEMORY_MB:
+  GOVC_DISK_GB:
+  GOVC_NETWORK:
+  GOVC_VM_NAME:
+  OS_NAME:
+
+inputs:
+  - name: pipeline
+  - name: config
+  - name: stembuild
+
+run:
+  path: pipeline/ci/scripts/deploy-windows-stemcell.sh
