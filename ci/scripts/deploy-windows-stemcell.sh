@@ -14,7 +14,7 @@ function construct_stemcell() {
 
   echo "creating stemcell"
 
-  ./stembuild/$stembuild_file_name construct -vm-ip $VM_IP -vm-username $VM_ADMIN_USERNAME -vm-password $VM_PASSWORD -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER
+  ./stembuild/$stembuild_file_name construct -vm-ip $VM_IP -vm-username $VM_ADMIN_USERNAME -vm-password $VM_ADMIN_PASSWORD -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER/$GOVC_VM_NAME
 
 }
 
