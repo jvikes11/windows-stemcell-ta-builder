@@ -8,7 +8,13 @@ source pipeline/ci/scripts/common.sh
 echo "Deploy stemcell for $OS_NAME"
 
 function create_stemcell() {
+
   echo "creating stemcell"
+
+  stembuild_file_name=$(basename $(cat stembuild/metadata.json | jq -r '.ProductFiles | .[].AWSObjectKey' | grep linux))
+  echo $stembuild_file_name
+
+#  ./STEMBUILD-BINARY construct -vm-ip 'TARGET-VM-IP' -vm-username 'TARGET-USERNAME' -vm-password 'TARGET-VM-PASSWORD' -vcenter-url 'VCENTER-URL' -vcenter-username 'VCENTER-USERNAME' -vcenter-password 'VCENTER-PASSWORD' -vm-inventory-path 'INVENTORY-PATH'
 }
 
 function upload_files() {
