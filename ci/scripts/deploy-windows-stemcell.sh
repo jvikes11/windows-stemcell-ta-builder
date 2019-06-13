@@ -28,7 +28,7 @@ function package_stemcell() {
 
 }
 
-construct_stemcell
+# construct_stemcell
 package_stemcell
 
 exit 1
