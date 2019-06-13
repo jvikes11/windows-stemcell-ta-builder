@@ -28,7 +28,16 @@ function package_stemcell() {
 
 }
 
+function upload_stemcell() {
+
+  echo "uploading stemcell"
+
+  curl -u $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD -i -k -X PUT -# -T $stemcell_tgz $ARTIFACTORY_URL/$stemcell_tgz
+
+}
+
 # construct_stemcell
-package_stemcell
+# package_stemcell
+upload_stemcell
 
 exit 1
