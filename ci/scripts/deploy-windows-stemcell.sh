@@ -32,6 +32,8 @@ function upload_stemcell() {
 
   echo "uploading stemcell"
 
+  stemcell_tgz=$(ls bosh-stemcell*.tgz)
+
   curl -u $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD -i -k -X PUT -# -T $stemcell_tgz $ARTIFACTORY_URL/$stemcell_tgz
 
 }
