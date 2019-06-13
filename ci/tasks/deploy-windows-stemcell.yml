@@ -22,6 +22,7 @@ params:
 inputs:
   - name: pipeline
   - name: config
+  - name: lgpo-zip
   - name: stembuild
 
 run:
