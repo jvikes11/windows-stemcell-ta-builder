@@ -14,7 +14,7 @@ function create_stemcell() {
   stembuild_file_name=$(basename $(cat stembuild/metadata.json | jq -r '.ProductFiles | .[].AWSObjectKey' | grep linux))
   echo $stembuild_file_name
 
-#  ./STEMBUILD-BINARY construct -vm-ip 'TARGET-VM-IP' -vm-username 'TARGET-USERNAME' -vm-password 'TARGET-VM-PASSWORD' -vcenter-url 'VCENTER-URL' -vcenter-username 'VCENTER-USERNAME' -vcenter-password 'VCENTER-PASSWORD' -vm-inventory-path 'INVENTORY-PATH'
+  ./stembuild/$stembuild_file_name construct -vm-ip $VM_IP -vm-username $VM_ADMIN_USERNAME -vm-password $VM_PASSWORD -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER
 }
 
 function upload_files() {
