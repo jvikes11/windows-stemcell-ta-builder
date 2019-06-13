@@ -8,6 +8,7 @@ source pipeline/ci/scripts/common.sh
 echo "Deploy stemcell for $OS_NAME"
 
 stembuild_file_name=$(basename $(cat stembuild/metadata.json | jq -r '.ProductFiles | .[].AWSObjectKey' | grep linux))
+chmod +x stembuild/$stembuild_file_name
 
 function construct_stemcell() {
 
