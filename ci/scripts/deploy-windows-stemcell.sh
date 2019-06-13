@@ -18,6 +18,8 @@ function construct_stemcell() {
 
   ./stembuild/$stembuild_file_name construct -vm-ip $VM_IP -vm-username $VM_ADMIN_USERNAME -vm-password $VM_ADMIN_PASSWORD -vcenter-url $GOVC_URL -vcenter-username $GOVC_USERNAME -vcenter-password $GOVC_PASSWORD -vm-inventory-path $GOVC_FOLDER/$GOVC_VM_NAME
 
+  govc vm.power -off -vm.ip $VM_IP
+
 }
 
 function package_stemcell() {
