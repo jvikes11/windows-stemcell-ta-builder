@@ -38,8 +38,8 @@ function upload_stemcell() {
 
 }
 
-# construct_stemcell
-# package_stemcell
+construct_stemcell
+package_stemcell
 upload_stemcell
 
 exit 1
