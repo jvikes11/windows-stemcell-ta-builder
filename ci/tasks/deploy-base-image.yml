@@ -25,6 +25,7 @@ params:
   GOVC_NETWORK:
   GOVC_VM_NAME:
   OS_NAME:
+  VM_IP:
 
 inputs:
   - name: pipeline

@@ -50,9 +50,14 @@ function initial_boot_vm() {
   local govc_hd_disk_name=$(govc device.info -vm $GOVC_VM_NAME -json | jq -r '.Devices | .[].Name' | grep disk)
   local govc_disk_controller_name=$(govc device.info -vm $GOVC_VM_NAME -json | jq -r '.Devices | .[].Name' | grep lsilogic)
 
+  echo $govc_hd_disk_name
+
   govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order -
   govc device.remove -vm $GOVC_VM_NAME $govc_hd_disk_name
   govc device.remove -vm $GOVC_VM_NAME $govc_disk_controller_name
+
+  sleep 10
+
   govc device.scsi.add -vm $GOVC_VM_NAME -type lsilogic-sas
   govc vm.disk.create -vm $GOVC_VM_NAME -name $govc_hd_disk_name/disk1 -size $GOVC_DISK_GB -thick
 

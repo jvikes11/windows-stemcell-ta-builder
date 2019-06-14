@@ -58,6 +58,7 @@ jobs:
       GOVC_VM_NAME:       (( grab meta.govc_vm_name ))
 
       OS_NAME:            (( grab meta.os_name ))
+      VM_IP:              (( grab meta.vm_ip ))
 
       DEBUG:              (( grab meta.debug || false ))
 
