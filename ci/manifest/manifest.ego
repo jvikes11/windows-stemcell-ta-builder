@@ -10,6 +10,7 @@ groups:
 - name: all
   jobs:
   - create-base-image
+  - create-stemcell
 
 jobs:
 <% if config.HasFeature("slack_updates") { %>
@@ -37,7 +38,6 @@ jobs:
     - get: base-floppy-img
     - get: config
     - get: pipeline
-    - get: stemcells-windows-server
   - task: deploy-base-image
     file: pipeline/ci/tasks/deploy-base-image.yml
     params:
@@ -60,6 +60,39 @@ jobs:
       OS_NAME:            (( grab meta.os_name ))
 
       DEBUG:              (( grab meta.debug || false ))
+
+- name: create-stemcell
+  serial: true
+  public: true
+  plan:
+  - aggregate:
+    - get: config
+    - get: pipeline
+    - get: lgpo-zip
+    - get: stembuild
+      resource: stemcells-windows-server
+      params:
+        globs:
+        - "*linux*2019.5*"
+  - task: deploy-windows-stemcell
+    file: pipeline/ci/tasks/deploy-windows-stemcell.yml
+    params:
+      GOVC_URL:              (( grab meta.govc_url ))
+      GOVC_INSECURE:         (( grab meta.govc_insecure ))
+      GOVC_USERNAME:         (( grab meta.govc_username ))
+      GOVC_PASSWORD:         (( grab meta.govc_password ))
+      GOVC_DATACENTER:       (( grab meta.govc_datacenter ))
+      GOVC_FOLDER:           (( grab meta.govc_folder ))
+      GOVC_VM_NAME:          (( grab meta.govc_vm_name ))
+      VM_IP:                 (( grab meta.vm_ip ))
+      VM_ADMIN_USERNAME:     (( grab meta.vm_admin_username ))
+      VM_ADMIN_PASSWORD:     (( grab meta.vm_admin_password ))
+      DEBUG:                 (( grab meta.debug || false ))
+  - put: stemcell
+    params:
+      file: "./build/bosh-stemcell*.tgz"
+
+
 resources:
 - name: stemcells-windows-server
   type: pivnet
@@ -93,14 +126,29 @@ resources:
 - name: windows-core-iso
   type: file-url
   source:
-    url: (( grab meta.iso_url ))
+    url: (( grab meta.artifactory.iso_url ))
     filename: windows-core-iso.iso
 
 - name: base-floppy-img
   type: file-url
   source:
-    url: (( grab meta.img_url ))
+    url: (( grab meta.artifactory.img_url ))
     filename: base-floppy.img
+
+- name: lgpo-zip
+  type: file-url
+  source:
+    url: ((grab meta.lgpo_zip_url ))
+    filename: LGPO.zip
+
+- name: stemcell
+  type: artifactory
+  source:
+    endpoint:   (( grab meta.artifactory.endpoint ))
+    repository: (( grab meta.artifactory.repository ))
+    username:   (( grab meta.artifactory.username ))
+    password:   (( grab meta.artifactory.password ))
+    regex: "bosh-stemcell-(?<version>.*)-vsphere-esxi-*-go_agent.tgz"
 
 resource_types:
 - name: pivnet
@@ -108,8 +156,14 @@ resource_types:
   source:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
+
 - name: file-url
   type: docker-image
   source:
     repository: pivotalservices/concourse-curl-resource
     tag: latest
+
+- name: artifactory
+  type: docker-image
+  source:
+    repository: pivotalservices/artifactory-resource

@@ -29,5 +29,8 @@ inputs:
   - name: lgpo-zip
   - name: stembuild
 
+outputs:
+  - name: build
+
 run:
   path: pipeline/ci/scripts/deploy-windows-stemcell.sh
