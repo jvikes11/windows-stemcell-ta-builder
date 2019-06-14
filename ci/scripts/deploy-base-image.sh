@@ -68,9 +68,15 @@ function initial_boot_vm() {
 
 }
 
-upload_files
-create_vm
-initial_boot_vm
+function customize_vm() {
+  echo "customize vm"
+
+}
+
+#upload_files
+#create_vm
+#initial_boot_vm
+customize_vm
 
 #govc vm.guest.tools -mount $GOVC_VM_NAME
 
