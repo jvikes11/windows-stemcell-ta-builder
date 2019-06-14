@@ -53,10 +53,9 @@ function initial_boot_vm() {
   echo $govc_hd_disk_name
 
   govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order -
+
   govc device.remove -vm $GOVC_VM_NAME $govc_hd_disk_name
   govc device.remove -vm $GOVC_VM_NAME $govc_disk_controller_name
-
-  sleep 10
 
   govc device.scsi.add -vm $GOVC_VM_NAME -type lsilogic-sas
   govc vm.disk.create -vm $GOVC_VM_NAME -name $govc_hd_disk_name/disk1 -size $GOVC_DISK_GB -thick
@@ -71,18 +70,16 @@ function initial_boot_vm() {
 
   govc vm.power -on $GOVC_VM_NAME
 
-#  govc vm.info -json $GOVC_VM_NAME | jq -r '.VirtualMachines | .[].Summary.Runtime.PowerState'
-#
   echo "waiting for machine to start"
 
-  while :; do
-    ping -q -c1 $VM_IP >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
+  while :
+  do
+    ping -c 1 $VM_IP
+    if [[ $? -ne 0 ]]; then
       break
     else
-      printf "\r."
+      sleep 5
     fi
-    sleep 5
   done
 
   echo "machine started"
