@@ -74,12 +74,14 @@ function initial_boot_vm() {
 
   while :
   do
-    ping -c 1 $VM_IP
-    if [[ $? -ne 0 ]]; then
+    if [[ ping -c 1 -W 1 $VM_IP | grep reply ]]; then
+      echo "if true"
       break
     else
+      echo "if false"
       sleep 5
     fi
+    echo "end while"
   done
 
   echo "machine started"
