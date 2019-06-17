@@ -16,9 +16,9 @@ dwOption, IntPtr lpBuffer, int dwBufferLength);
   $result1 -and $result2
 }
 
-netsh winhttp set proxy "$proxy_url"
+netsh winhttp set proxy "$env:PROXY_URL"
 
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyServer -Value "http://$proxy_url"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyServer -Value "http://$env:PROXY_URL"
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyEnable -Value 1
 
 Echo "Applying Proxy Settings"
