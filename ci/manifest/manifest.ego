@@ -59,6 +59,10 @@ jobs:
 
       OS_NAME:            (( grab meta.os_name ))
       VM_IP:              (( grab meta.vm_ip ))
+      VM_ADMIN_USERNAME:  (( grab meta.vm_admin_username ))
+      VM_ADMIN_PASSWORD:  (( grab meta.vm_admin_password ))
+
+      MSI_DOWNLOAD_URL:   (( grab meta.msi_download_url ))
 
       DEBUG:              (( grab meta.debug || false ))
 

@@ -83,7 +83,6 @@ function initial_boot_vm() {
       echo "host up"
       break
     fi
-    echo "end while"
   done
 
   echo "machine started"
@@ -92,14 +91,12 @@ function initial_boot_vm() {
 function customize_vm() {
   echo "customize vm"
 
-  pwsh config/default/windows_stemcell_builder/test.ps1
+  pwsh pipeline/powershell/customize-base-image.ps1
 }
 
 upload_files
 create_vm
 initial_boot_vm
 customize_vm
-
-#govc vm.guest.tools -mount $GOVC_VM_NAME
 
 exit 1
