@@ -74,12 +74,14 @@ function initial_boot_vm() {
 
   while :
   do
-    if [[ ping -c 1 -W 1 $VM_IP | grep reply ]]; then
-      echo "if true"
-      break
-    else
-      echo "if false"
+    count=$( ping -c 1 $VM_IP | grep icmp* | wc -l )
+
+    if [ $count -eq 0 ]; then
+      echo "host still down"
       sleep 5
+    else
+      echo "host up"
+      break
     fi
     echo "end while"
   done
