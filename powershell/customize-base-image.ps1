@@ -3,7 +3,7 @@ $username = "$env:VM_IP\$env:VM_ADMIN_USERNAME"
 $password = $env:VM_ADMIN_PASSWORD | ConvertTo-SecureString -AsPlainText -Force
 $creds = New-Object -TypeName System.Management.Automation.PSCredential $username,$password
 
-Set-Item -Path WSMan:\localhost\Client\TrustedHosts "$env:VM_IP" -Force
+#Set-Item -Path WSMan:\localhost\Client\TrustedHosts "$env:VM_IP" -Force
 
 Invoke-Command -ComputerName $env:VM_IP -ScriptBlock {
   New-Item -Path C:\Software -ItemType Directory;
