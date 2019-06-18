@@ -94,9 +94,9 @@ function customize_vm() {
   pwsh pipeline/powershell/customize-base-image.ps1
 }
 
-#upload_files
-#create_vm
-#initial_boot_vm
+upload_files
+create_vm
+initial_boot_vm
 customize_vm
 
 exit 1
