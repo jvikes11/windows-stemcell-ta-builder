@@ -10,13 +10,13 @@ Invoke-Command -ComputerName $env:VM_IP -ScriptBlock {
 $session = New-PSSession -ComputerName $env:VM_IP -Authentication Negotiate -Credential $creds
 Copy-Item -Path pipeline/powershell/* -Destination C:\Software -ToSession $session;
 
-Invoke-Command -ComputerName $env:VM_IP -ScriptBlock {
-    echo $env:MSI_DOWNLOAD_URL
-    Invoke-WebRequest -Uri "$env:MSI_DOWNLOAD_URL" -OutFile "C:\Software\.";
-    msiexec.exe /i C:\Software\*.msi /passive;
+Invoke-Command -ComputerName $env:VM_IP -ArgumentList $env:MSI_DOWNLOAD_URL -ScriptBlock {
+    param($msi_download_url);
+    Invoke-WebRequest -Uri $msi_download_url -OutFile "C:\Software\install.msi"
+    msiexec.exe /i C:\Software\install.msi /passive;
 } -Authentication Negotiate -Credential $creds
 
-pipeline/powershell/install-updates.ps1 -computer $env:VM_IP
+pipeline/powershell/install-updates.ps1 -Computer $env:VM_IP
 
 Invoke-Command -ComputerName $env:VM_IP -ScriptBlock {
   Set-Service -Name BESClient -StartupType Disabled -Status Stopped
