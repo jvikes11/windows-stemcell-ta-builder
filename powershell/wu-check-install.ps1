@@ -7,6 +7,9 @@ User the Computer parameter to specify the Computer to remotely install windows 
 
 [CmdletBinding()]
 
+&C:\Software\apply-proxy.ps1
+Start-sleep -seconds 10
+
 #install pswindows updates module
 
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
