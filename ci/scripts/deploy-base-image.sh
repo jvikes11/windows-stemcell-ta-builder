@@ -64,6 +64,8 @@ function initial_boot_vm() {
 
   govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order cdrom,disk,ethernet,floppy
 
+  govc vm.power -on $GOVC_VM_NAME
+
   echo "waiting for machine to start"
 
   while :
