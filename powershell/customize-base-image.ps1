@@ -1,3 +1,4 @@
+
 $username = "$env:VM_IP\$env:VM_ADMIN_USERNAME"
 $password = $env:VM_ADMIN_PASSWORD | ConvertTo-SecureString -AsPlainText -Force
 $creds = New-Object -TypeName System.Management.Automation.PSCredential $username,$password
