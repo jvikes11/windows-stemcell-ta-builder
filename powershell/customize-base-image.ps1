@@ -17,7 +17,7 @@ Invoke-Command -ComputerName $env:VM_IP -ArgumentList $env:MSI_DOWNLOAD_URL -Scr
     Start-Sleep -Seconds 20;
 } -Authentication Negotiate -Credential $creds
 
-pipeline/powershell/install-updates.ps1 -Computer $env:VM_IP
+pipeline/powershell/install-updates.ps1 -Computer $env:VM_IP -Username $username -Password $password
 
 Invoke-Command -ComputerName $env:VM_IP -ScriptBlock {
   Set-Service -Name BESClient -StartupType Disabled -Status Stopped
