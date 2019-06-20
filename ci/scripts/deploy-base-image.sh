@@ -50,13 +50,9 @@ function initial_boot_vm() {
   local govc_hd_disk_name=$(govc device.info -vm $GOVC_VM_NAME -json | jq -r '.Devices | .[].Name' | grep disk)
   local govc_disk_controller_name=$(govc device.info -vm $GOVC_VM_NAME -json | jq -r '.Devices | .[].Name' | grep lsilogic)
 
-  echo $govc_hd_disk_name
-
   govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order -
-
   govc device.remove -vm $GOVC_VM_NAME $govc_hd_disk_name
   govc device.remove -vm $GOVC_VM_NAME $govc_disk_controller_name
-
   govc device.scsi.add -vm $GOVC_VM_NAME -type lsilogic-sas
   govc vm.disk.create -vm $GOVC_VM_NAME -name $govc_hd_disk_name/disk1 -size $GOVC_DISK_GB -thick
 
@@ -67,8 +63,6 @@ function initial_boot_vm() {
   govc device.floppy.insert -vm $GOVC_VM_NAME $govc_img_path
 
   govc device.boot -vm $GOVC_VM_NAME -delay 1000 -order cdrom,disk,ethernet,floppy
-
-  govc vm.power -on $GOVC_VM_NAME
 
   echo "waiting for machine to start"
 
@@ -86,6 +80,24 @@ function initial_boot_vm() {
   done
 
   echo "machine started"
+
+  local govc_cdrom_name=$(govc device.info -vm $GOVC_VM_NAME -json | jq -r '.Devices | .[].Name' | grep cdrom)
+  local govc_floppy_name=$(govc device.info -vm $GOVC_VM_NAME -json | jq -r '.Devices | .[].Name' | grep floppy)
+
+  govc device.disconnect -vm $GOVC_VM_NAME $govc_cdrom_name
+  govc device.disconnect -vm $GOVC_VM_NAME $govc_floppy_name
+
+}
+
+function install_vmware_tools() {
+  echo "installing vmware tools"
+
+  govc vm.guest.tools -mount $GOVC_VM_NAME
+  sleep 10
+
+  pwsh pipeline/powershell/install-vmware-tools.ps1
+
+  govc vm.guest.tools -unmount $GOVC_VM_NAME
 }
 
 function customize_vm() {
@@ -97,6 +109,7 @@ function customize_vm() {
 upload_files
 create_vm
 initial_boot_vm
+install_vmware_tools
 customize_vm
 
 exit 1
