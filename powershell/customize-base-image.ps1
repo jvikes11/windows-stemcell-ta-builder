@@ -11,7 +11,6 @@ $session = New-PSSession -ComputerName $env:VM_IP -Authentication Negotiate -Cre
 Copy-Item -Path pipeline/powershell/* -Destination C:\Software -ToSession $session;
 
 Invoke-Command -ComputerName $env:VM_IP -ScriptBlock {
-    powershell C:\Software\configure-server.ps1;
     Invoke-WebRequest -Uri "$env:MSI_DOWNLOAD_URL" -OutFile "C:\Software\.";
     msiexec.exe /i C:\Software\*.msi /passive;
 } -Authentication Negotiate -Credential $creds
