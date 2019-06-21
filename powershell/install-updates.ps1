@@ -27,12 +27,15 @@ $pass = $password | ConvertTo-SecureString -AsPlainText -Force
 $creds = New-Object -TypeName System.Management.Automation.PSCredential $username,$pass
 
 #install pswindows updates module
-
+$nugetinstall = invoke-command -ComputerName $computer -ScriptBlock {
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    install-module pswindowsupdate -force
+    Import-Module PSWindowsUpdate -force
+} -Authentication Negotiate -Credential $creds
 
 Do{
 
-  #starts up a remote powershell session to the computer
-
+#starts up a remote powershell session to the computer
   do{
     $session = New-PSSession -ComputerName $computer -Authentication Negotiate -Credential $creds
     "reconnecting remotely to $computer"
@@ -57,16 +60,18 @@ Do{
 
     #remote command to install windows updates, creates a scheduled task on remote computer
 
-    invoke-command -ComputerName $computer -ScriptBlock {
-      C:\Software\wu-check-install.ps1
-    } -Authentication Negotiate -Credential $creds
+    $Script = {
+      import-module PSWindowsUpdate;
+      Get-WindowsUpdate -AcceptAll -Install | Out-File C:\PSWindowsUpdate.log
+    }
+
+    Invoke-WUjob -ComputerName $computer -Script $Script -Confirm:$false -RunNow
 
     #Show update status until the amount of installed updates equals the same as the amount of updates available
 
     sleep -Seconds 30
 
-    do {
-      $updatestatus = Get-Content \\$computer\c$\PSWindowsUpdate.log
+    do {$updatestatus = Get-Content \\$computer\c$\PSWindowsUpdate.log
 
       "Currently processing the following update:"
 
@@ -74,13 +79,19 @@ Do{
 
       sleep -Seconds 10
 
-      $ErrorActionPreference = 'SilentlyContinue'
+      $ErrorActionPreference = ‘SilentlyContinue’
 
       $installednumber = ([regex]::Matches($updatestatus, "Installed" )).count
 
-      $ErrorActionPreference = 'Continue'
+      $ErrorActionPreference = ‘Continue’
 
     }until ( $installednumber -eq $updatenumber)
+
+    #restarts the remote computer and waits till it starts up again
+
+    "restarting remote computer"
+
+    Restart-Computer -Wait -ComputerName $computer -Force
 
   }
 

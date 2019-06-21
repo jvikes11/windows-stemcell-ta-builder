@@ -1,28 +1,15 @@
-﻿function Reload-InternetOptions
-{
-  $signature = @'
-[DllImport("wininet.dll", SetLastError = true, CharSet=CharSet.Auto)]
-public static extern bool InternetSetOption(IntPtr hInternet, int
-dwOption, IntPtr lpBuffer, int dwBufferLength);
-'@
-  $interopHelper = Add-Type -MemberDefinition $signature -Name MyInteropHelper -PassThru
-
-  $INTERNET_OPTION_SETTINGS_CHANGED = 39
-  $INTERNET_OPTION_REFRESH = 37
-
-  $result1 = $interopHelper::InternetSetOption(0, $INTERNET_OPTION_SETTINGS_CHANGED, 0, 0)
-  $result2 = $interopHelper::InternetSetOption(0, $INTERNET_OPTION_REFRESH, 0, 0)
-
-  $result1 -and $result2
-}
-
-netsh winhttp set proxy "$env:PROXY_URL"
-
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyServer -Value "http://$env:PROXY_URL"
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyEnable -Value 1
+﻿Param (
+    [Parameter(Mandatory=$true)][string]$proxy_url
+)
 
 Echo "Applying Proxy Settings"
 
-Reload-InternetOptions
+$proxy_reg_string="F            " + $proxy_url + "                                        "
+
+netsh winhttp set proxy $proxy_url
+
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyServer -Value "http://$proxy_url"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyEnable -Value 1
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections" -Name DefaultConnectionSettings -Value ([System.Text.Encoding]::UTF8.GetBytes($proxy_reg_string)) -Type Binary
 
 Echo "Completed Applying Proxy"
