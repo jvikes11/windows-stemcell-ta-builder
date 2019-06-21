@@ -10,6 +10,14 @@ Invoke-Command -ComputerName $env:VM_IP -ScriptBlock {
 $session = New-PSSession -ComputerName $env:VM_IP -Authentication Negotiate -Credential $creds
 Copy-Item -Path pipeline/powershell/* -Destination C:\Software -ToSession $session;
 
+Invoke-Command -ComputerName $env:VM_IP -ArgumentList $env:https_proxy -ScriptBlock {
+    param($proxy_url);
+    $proxy_url = $env:https_proxy.Replace("https://","");
+    $proxy_url = $env:https_proxy.Replace("http://","");
+    C:\Software\apply-proxy.ps1 -proxy_url $proxy_url;
+    Start-Sleep -Seconds 10;
+} -Authentication Negotiate -Credential $creds
+
 Invoke-Command -ComputerName $env:VM_IP -ArgumentList $env:MSI_DOWNLOAD_URL -ScriptBlock {
     param($msi_download_url);
     Invoke-WebRequest -Uri $msi_download_url -OutFile "C:\Software\install.msi";
