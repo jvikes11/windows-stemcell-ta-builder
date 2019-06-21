@@ -112,6 +112,6 @@ upload_files
 create_vm
 initial_boot_vm
 install_vmware_tools
-customize_vm
+#customize_vm
 
 exit 1
