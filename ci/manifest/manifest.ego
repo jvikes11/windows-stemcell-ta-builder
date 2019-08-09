@@ -33,7 +33,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: windows-core-iso
     - get: base-floppy-img
     - get: config
@@ -70,7 +70,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: config
     - get: pipeline
     - get: lgpo-zip
